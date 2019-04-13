@@ -1,55 +1,59 @@
 package me.idarkyy.common.event;
 
 import me.idarkyy.common.event.annotations.EventHandler;
+import me.idarkyy.common.event.exception.EventException;
+import me.idarkyy.common.event.handler.HandlerList;
+import me.idarkyy.common.event.handler.HandlerMethod;
 import me.idarkyy.common.event.listener.Listener;
-import me.idarkyy.common.utils.ListHashMap;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ListenerManager {
-    private ListHashMap<Class<? extends Event>, Method> map = new ListHashMap<>();
-    private HashMap<Method, Listener> listenerObjects = new HashMap<>();
-
-    // TODO: 04/04/2019 Event Priorities
-
-    public void registerListener(Listener listener) {
+    public void register(Listener listener) {
         for (Method method : listener.getClass().getMethods()) {
-            if (method.isAnnotationPresent(EventHandler.class)) {
-                if (method.getParameterCount() != 1) {
-                    System.out.println("[WARN] Method " + method.getClass().getSimpleName() + "#" + method.getName() + " must have one Event parameter");
-                    return;
+            if (doesMeetTheRequirements(method)) {
+
+                @SuppressWarnings("all")
+                Class<? extends Event> param = (Class<? extends Event>) method.getParameterTypes()[0];
+
+                HandlerList handlerList = HandlerList.fromClass(param);
+                HandlerMethod handlerMethod = new HandlerMethod(method, listener);
+
+                if (handlerList == null) {
+                    throw new EventException("There is no public static getHandlerList method in event class " + param.getSimpleName());
                 }
 
-                Class<?> param = method.getParameterTypes()[0];
 
-                if(param.getSuperclass() != Event.class) {
-                    System.out.println("[WARN] Parameter of method " + method.getClass().getSimpleName() + "#" + method.getName() + " isn't a Event");
-                    return;
-                }
-
-                Class<? extends Event> clazz = (Class<? extends Event>) param;
-
-                map.putIfAbsent(clazz, new ArrayList<>());
-
-                map.addToList(clazz, method);
-                listenerObjects.put(method, listener);
+                handlerList.add(handlerMethod, method.getAnnotation(EventHandler.class).value());
             }
         }
     }
 
     public void call(Event event) {
-        for(Method method : map.get(event.getClass())) {
-            try {
-                method.invoke(listenerObjects.get(method), event);
-            } catch(IllegalAccessException e) {
-                System.out.println("Could not access method " + method.getClass().getSimpleName() + "#" + method.getName());
-            } catch(InvocationTargetException e) {
-                System.out.println("Could not invoke method " + method.getClass().getSimpleName() + "#" + method.getName());
-                e.printStackTrace();
-            }
+        HandlerList handlerList = HandlerList.fromClass(event.getClass());
+
+        if (handlerList == null) {
+            throw new EventException("There is no public static getHandlerList method in event class " + event.getClass().getSimpleName());
         }
+
+        handlerList.trigger(event);
+    }
+
+    private boolean doesMeetTheRequirements(Method method) {
+        if (!method.isAnnotationPresent(EventHandler.class)) {
+            return false;
+        }
+
+        if (method.getParameterCount() != 1) {
+            System.out.println("Warning: Method " + method.getName() + " in listener class " + method.getClass().getSimpleName() + " has to have only 1 parameter (the event)");
+            return false;
+        }
+
+        if (method.getParameterTypes()[0].getSuperclass() != Event.class) {
+            System.out.println("Warning: Method " + method.getName() + " in listener class " + method.getClass().getSimpleName() + ": Invalid event " + method.getParameterTypes()[0].getSimpleName());
+            return false;
+        }
+
+        return true;
     }
 }
