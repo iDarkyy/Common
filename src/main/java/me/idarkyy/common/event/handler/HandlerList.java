@@ -13,10 +13,6 @@ public class HandlerList {
 
     private ListHashMap<Integer, HandlerMethod> methods = new ListHashMap<>();
 
-    public HandlerList() {
-
-    }
-
     public static HandlerList fromClass(Class<? extends Event> clazz) {
         try {
             if (clazz.getDeclaredMethod(HANDLER_LIST_METHOD) != null) {
@@ -44,15 +40,10 @@ public class HandlerList {
 
     public Event trigger(Event event) {
         for (int i = 0; i < 6; i++) {
-            System.out.println("1: " + i);
             if (methods.containsKey(i)) {
-                System.out.println("contains");
                 for (HandlerMethod method : methods.get(i)) {
-                    System.out.println("happened");
                     method.invoke(event);
                 }
-            } else {
-                System.out.println("keys: " + methods.keySet().toString());
             }
         }
 
