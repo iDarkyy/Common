@@ -1,4 +1,4 @@
-package me.idarkyy.common.utils;
+package me.idarkyy.common.listhashmap;
 
 import java.util.ArrayList;
 import java.util.HashMap;

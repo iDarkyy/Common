@@ -1,6 +1,6 @@
 package me.idarkyy.common.youtube;
 
-import me.idarkyy.common.utils.WebUtil;
+import me.idarkyy.common.web.WebUtil;
 import org.json.JSONObject;
 
 import java.io.IOException;

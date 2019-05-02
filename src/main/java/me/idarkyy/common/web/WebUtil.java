@@ -1,4 +1,4 @@
-package me.idarkyy.common.utils;
+package me.idarkyy.common.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;

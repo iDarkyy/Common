@@ -1,4 +1,4 @@
-package me.idarkyy.common.utils;
+package me.idarkyy.common.resource;
 
 import java.io.*;
 import java.net.URL;

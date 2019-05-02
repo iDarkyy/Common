@@ -3,7 +3,7 @@ package me.idarkyy.common.event.handler;
 import me.idarkyy.common.event.Event;
 import me.idarkyy.common.event.enums.EventPriority;
 import me.idarkyy.common.event.exception.EventException;
-import me.idarkyy.common.utils.ListHashMap;
+import me.idarkyy.common.listhashmap.ListHashMap;
 
 import java.lang.reflect.InvocationTargetException;
 
