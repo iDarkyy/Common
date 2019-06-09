@@ -1,6 +1,6 @@
-import me.idarkyy.common.jarfile.JarFileMain;
+import me.idarkyy.common.jarfile.JarfileLoader;
 
-public class JarFileTest extends JarFileMain {
+public class JarFileTest extends JarfileLoader {
     public static void main(String[] args) {
         new JarFileTest().doThisAndThat();
     }

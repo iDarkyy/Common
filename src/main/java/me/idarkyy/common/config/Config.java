@@ -2,6 +2,7 @@ package me.idarkyy.common.config;
 
 import me.idarkyy.common.annotation.Unstable;
 import me.idarkyy.common.math.Numbers;
+import sun.security.pkcs.ParsingException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,10 +11,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Unstable("Probably won't work")
+@Unstable("Unfinished, Probably won't work")
 public class Config {
     private static final Pattern sectionPattern = Pattern.compile("([0-9a-zA-Z_\\-.@$]+)[ ]?=[ ]?([\"'].+[\"']|[a-zA-Z0-9 _\\-]+)");
-    public static String COMMENT_SEQUENCE = "#";
+    private static String COMMENT_SEQUENCE = "#";
     private HashMap<String, Object> sections = new HashMap<>();
 
     public Config load(File file) throws IOException {
@@ -23,15 +24,21 @@ public class Config {
     public Config load(InputStream inputStream) throws IOException {
         sections.clear();
 
-        for (String section : read(inputStream)) {
+        List<String> lines = read(inputStream);
+
+        for (int i = 0; i < lines.size(); i++) {
+            String section = lines.get(i);
+
             if (section.startsWith(COMMENT_SEQUENCE)) {
                 continue;
             }
 
             Matcher matcher = sectionPattern.matcher(section);
 
-            if (matcher.find()) {
+            if (matcher.matches()) {
                 put(matcher.group(1), matcher.group(2));
+            } else {
+                throw new ParsingException("Could not parse line " + (i + 1));
             }
         }
 
@@ -97,7 +104,7 @@ public class Config {
     }
 
     private void put(String key, String value) {
-        if (value.charAt(1) == '"' && value.charAt(value.length() - 1) == '"') {
+        if ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") && value.endsWith("'"))) {
             sections.put(key, value.substring(1, value.length() - 1));
             return;
         }
@@ -117,6 +124,8 @@ public class Config {
         while ((s = reader.readLine()) != null) {
             list.add(s);
         }
+
+        System.out.println("Total size: " + list.size());
 
         return list;
     }

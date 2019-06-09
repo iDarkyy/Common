@@ -7,6 +7,8 @@ import me.idarkyy.common.event.handler.HandlerMethod;
 import me.idarkyy.common.event.listener.Listener;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class ListenerManager {
     public void register(Listener listener) {
@@ -27,6 +29,14 @@ public class ListenerManager {
                 handlerList.add(handlerMethod, method.getAnnotation(EventHandler.class).value());
             }
         }
+    }
+
+    public void register(Collection<? extends Listener> listeners) {
+        listeners.forEach(this::register);
+    }
+
+    public void register(Listener... listeners) {
+        Arrays.stream(listeners).forEach(this::register);
     }
 
     public void call(Event event) {

@@ -1,4 +1,4 @@
-package me.idarkyy.common.listhashmap;
+package me.idarkyy.common.maps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.List;
 public class ListHashMap<K, LT> extends HashMap<K, List<LT>> {
     public void addToList(K key, LT value) {
         init(key);
+
         get(key).add(value);
     }
 

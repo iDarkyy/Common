@@ -1,6 +1,5 @@
 package me.idarkyy.common.command;
 
-import me.idarkyy.common.annotation.Nullable;
 import me.idarkyy.common.command.builder.CommandBuilder;
 import me.idarkyy.common.command.interfaces.Command;
 
@@ -10,11 +9,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class CommandMap {
-    private HashMap<String, Command> commands = new HashMap<>();
-    private HashMap<String, String> aliases = new HashMap<>();
+    private final HashMap<String, Command> commands = new HashMap<>();
+    private final HashMap<String, String> aliases = new HashMap<>();
 
-    private @Nullable
-    Responder responder;
+    private Responder responder;
 
     public CommandMap() {
         this(null);

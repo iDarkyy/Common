@@ -1,13 +1,13 @@
-package me.idarkyy.common.utils;
+package me.idarkyy.common.serialization;
 
 import java.io.*;
 
 public class ObjectSerializer {
-    public static byte[] serialize(Object obj) throws IOException {
+    public static byte[] serialize(Serializable serializable) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         ObjectOutputStream output = new ObjectOutputStream(bos);
-        output.writeObject(obj);
+        output.writeObject(serializable);
         output.flush();
 
         byte[] bytes = bos.toByteArray();

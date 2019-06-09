@@ -1,4 +1,4 @@
-import me.idarkyy.common.utils.MediaPlayer;
+import me.idarkyy.common.media.MediaPlayer;
 
 import java.io.IOException;
 import java.io.InputStream;

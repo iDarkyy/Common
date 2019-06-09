@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Youtube {
+    public static final String GLOBAL_API_KEY = "AIzaSyD1wjRGbzKgvjqAU25pREy1dVio9WpcuS0";
+
     private String apiKey;
 
     public Youtube() {
-        this.apiKey = "AIzaSyD1wjRGbzKgvjqAU25pREy1dVio9WpcuS0";
+        this.apiKey = GLOBAL_API_KEY;
     }
 
     public Youtube(String apiKey) {

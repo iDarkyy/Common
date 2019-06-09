@@ -10,10 +10,10 @@ public class Resource {
 
     }
 
-    public static void save(InputStream input, File to) throws IOException {
+    public static void copy(InputStream input, File to) throws IOException {
         Objects.requireNonNull(input);
 
-        if(to.isDirectory()) {
+        if (to.isDirectory()) {
             throw new IllegalArgumentException("File must not be a directory");
         }
 
@@ -35,20 +35,16 @@ public class Resource {
 
         resourcePath = resourcePath.replace('\\', '/');
 
-        try {
-            URL url = loader.getResource(resourcePath);
+        URL url = loader.getResource(resourcePath);
 
-            if (url == null) {
-                return null;
-            }
-
-            URLConnection connection = url.openConnection();
-
-            connection.setUseCaches(false);
-
-            return connection.getInputStream();
-        } catch (IOException ex) {
+        if (url == null) {
             return null;
         }
+
+        URLConnection connection = url.openConnection();
+
+        connection.setUseCaches(false);
+
+        return connection.getInputStream();
     }
 }

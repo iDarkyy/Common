@@ -3,12 +3,11 @@ package me.idarkyy.common.math;
 import java.util.*;
 
 public class Numbers {
+    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
     private static String FIRST_ORDINAL_NUMBER = "st";
     private static String SECOND_ORDINAL_NUMBER = "nd";
     private static String THIRD_ORDINAL_NUMBER = "rd";
     private static String OTHER_ORDINAL_NUMBERS = "th";
-
-    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
 
     static {
         suffixes.put(1_000L, "k");
@@ -152,6 +151,10 @@ public class Numbers {
         boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
 
         return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+    }
+
+    public static double getDecimalAmount(Number number) {
+        return Math.log10(number.doubleValue());
     }
 
     public static boolean isBetween(Number number, int bound1, int bound2) {
